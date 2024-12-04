@@ -8,12 +8,12 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
-func handleRequest(ctx context.Context, event json.RawMessage) error {
+func handler(ctx context.Context, event json.RawMessage) error {
 	// Logging
 	log.Printf("INFO: handleRequest - event: %+v", string(event))
 	return nil
 }
 
 func main() {
-	lambda.Start(handleRequest)
+	lambda.Start(handler)
 }
