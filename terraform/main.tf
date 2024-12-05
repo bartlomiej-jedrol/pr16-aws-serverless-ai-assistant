@@ -36,7 +36,6 @@ resource "aws_lambda_function" "assistant_lambda" {
   }
 }
 
-# Assistant Lambda Role
 resource "aws_iam_role" "assistant_lambda_role" {
   name = var.assistant_lambda_role
   assume_role_policy = jsonencode({
@@ -51,4 +50,27 @@ resource "aws_iam_role" "assistant_lambda_role" {
       },
     ]
   })
+}
+
+resource "aws_iam_role_policy" "assistant_lambda_policy" {
+  name = var.assistant_lambda_policy
+  role = aws_iam_role.assistant_lambda_role.name
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ]
+        Effect   = "Allow"
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+resource "aws_cloudwatch_log_group" "assistant_lambda_log_group" {
+  name = "/aws/lambda/${var.assistant_lambda_name}"
 }
