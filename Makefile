@@ -12,3 +12,13 @@ build: clean
 deploy: build
 	aws lambda update-function-code --function-name pr16-assistant \
 	--zip-file fileb://${BIN_PATH}/assistant.zip
+
+logs:
+	echo $(START_TIME)
+	@sleep 5
+	aws logs filter-log-events \
+	--log-group-name "/aws/lambda/pr16-assistant" \
+	--start-time $(START_TIME) \
+	--limit 10000 \
+	--color auto \
+	--output text
