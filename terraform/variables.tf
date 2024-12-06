@@ -18,6 +18,10 @@ variable "assistant_lambda_policy" {
   default = "pr16-assistant-lambda-policy"
 }
 
+variable "assistant_api_key" {
+  type = string
+}
+
 variable "openai_api_key" {
   type = string
 }
