@@ -2,12 +2,13 @@ package api
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 	"os"
 	"strings"
 
 	"github.com/aws/aws-lambda-go/events"
+	iLog "github.com/bartlomiej-jedrol/go-toolkit/log"
+	"github.com/bartlomiej-jedrol/pr16-aws-serverless-ai-assistant/constants"
 	"github.com/bartlomiej-jedrol/pr16-aws-serverless-ai-assistant/telegram"
 )
 
@@ -17,6 +18,7 @@ func Authenticate(apiKey string) bool {
 }
 
 func BuildResponse(statusCode int, body any) (events.APIGatewayProxyResponse, error) {
+	function := "BuildResponse"
 	res := telegram.Response{}
 	switch v := body.(type) {
 	case error:
@@ -29,7 +31,7 @@ func BuildResponse(statusCode int, body any) (events.APIGatewayProxyResponse, er
 
 	r, err := json.Marshal(res)
 	if err != nil {
-		log.Printf("INFO: handler - failed to marshal body, %v", err)
+		iLog.Info("failed to marshal body", "", err, constants.Service, function, &constants.Endpoint, nil)
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
 			Body:       `{"text": "internal server error}`,
