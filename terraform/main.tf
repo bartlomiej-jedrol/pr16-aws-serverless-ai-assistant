@@ -33,6 +33,7 @@ resource "aws_lambda_function" "assistant_lambda" {
       ASSISTANT_API_KEY = var.assistant_api_key
       OPENAI_API_KEY    = var.openai_api_key
       DUB_API_KEY       = var.dub_api_key
+      SERVICE_NAME      = var.assistant_lambda_name
     }
   }
 }
