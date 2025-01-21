@@ -22,12 +22,20 @@ func init() {
 
 func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	function := "handler"
-	iLog.Info("authorization header", request.Headers["Authorization"], nil, configuration.ServiceName, function)
+	iLog.Info("body", request.Body, nil, configuration.ServiceName, function)
 
 	if !api.Authenticate(request.Headers["Authorization"]) {
 		return api.BuildResponse(http.StatusForbidden, "unauthorized")
 	}
 
+	assistantRequest, err := api.ParseRequest(request.Body)
+	if err != nil {
+		return api.BuildResponse(http.StatusInternalServerError, "internal server error")
+	}
+
+	if assistantRequest.Text == "parse blood results" {
+		return api.BuildResponse(http.StatusOK, "got parse blood results")
+	}
 	return api.BuildResponse(http.StatusOK, "response")
 }
 

@@ -12,9 +12,30 @@ import (
 	"github.com/bartlomiej-jedrol/pr16-aws-serverless-ai-assistant/telegram"
 )
 
+type Request struct {
+	Text string
+}
+
+type Response struct {
+	Text string
+}
+
 func Authenticate(apiKey string) bool {
 	ak := strings.TrimPrefix(apiKey, "Bearer ")
 	return ak == os.Getenv("ASSISTANT_API_KEY")
+}
+
+func ParseRequest(body string) (*Request, error) {
+	function := "ParseRequest"
+
+	msg := Request{}
+	err := json.Unmarshal([]byte(body), &msg)
+	if err != nil {
+		iLog.Error("failed to unmarshal assistant message", nil, err, configuration.ServiceName, function)
+		return nil, err
+	}
+	iLog.Info("assitant message", msg, nil, configuration.ServiceName, function)
+	return &msg, nil
 }
 
 func BuildResponse(statusCode int, body any) (events.APIGatewayProxyResponse, error) {
