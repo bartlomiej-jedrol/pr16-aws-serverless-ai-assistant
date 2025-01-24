@@ -34,6 +34,7 @@ resource "aws_lambda_function" "assistant_lambda" {
       OPENAI_API_KEY    = var.openai_api_key
       DUB_API_KEY       = var.dub_api_key
       SERVICE_NAME      = var.assistant_lambda_name
+      CONVERT_API_KEY   = var.convert_api_key
     }
   }
 }
@@ -64,7 +65,8 @@ resource "aws_iam_role_policy" "assistant_lambda_policy" {
         Action = [
           "logs:CreateLogGroup",
           "logs:CreateLogStream",
-          "logs:PutLogEvents"
+          "logs:PutLogEvents",
+          "s3:GetObject"
         ]
         Effect   = "Allow"
         Resource = "*"
@@ -75,4 +77,9 @@ resource "aws_iam_role_policy" "assistant_lambda_policy" {
 
 resource "aws_cloudwatch_log_group" "assistant_lambda_log_group" {
   name = "/aws/lambda/${var.assistant_lambda_name}"
+}
+
+# ========== S3 buckets ==========
+resource "aws_s3_bucket" "assistant_bucket" {
+  bucket = var.assistant_bucket_name
 }

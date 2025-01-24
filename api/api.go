@@ -13,7 +13,8 @@ import (
 )
 
 type Request struct {
-	Text string
+	Text        string `json:"text"`
+	S3ObjectKey string `json:"s3_object_key"`
 }
 
 type Response struct {

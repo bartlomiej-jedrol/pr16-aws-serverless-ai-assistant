@@ -18,7 +18,18 @@ variable "assistant_lambda_policy" {
   default = "pr16-assistant-lambda-policy"
 }
 
+# ========== S3 buckets ==========
+variable "assistant_bucket_name" {
+  type    = string
+  default = "pr16-assistant-bucket"
+}
+
+# ========== API keys ==========
 variable "assistant_api_key" {
+  type = string
+}
+
+variable "convert_api_key" {
   type = string
 }
 
