@@ -18,9 +18,8 @@ import (
 
 var (
 	s3Client      *s3.Client
-	s3Bucket      = "krasnynt-blood-results-001"
+	s3Bucket      = "pr16-assistant-bucket"
 	lambdaTmpPath = "/tmp"
-	// "test/2025-01-15_morfologia_crp_mykoplazma.pdf"
 )
 
 func init() {

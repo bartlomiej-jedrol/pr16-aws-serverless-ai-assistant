@@ -66,7 +66,8 @@ resource "aws_iam_role_policy" "assistant_lambda_policy" {
           "logs:CreateLogGroup",
           "logs:CreateLogStream",
           "logs:PutLogEvents",
-          "s3:GetObject"
+          "s3:GetObject",
+          "s3:ListBucket"
         ]
         Effect   = "Allow"
         Resource = "*"
