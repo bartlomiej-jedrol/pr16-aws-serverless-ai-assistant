@@ -35,6 +35,7 @@ resource "aws_lambda_function" "assistant_lambda" {
       DUB_API_KEY       = var.dub_api_key
       SERVICE_NAME      = var.assistant_lambda_name
       CONVERT_API_KEY   = var.convert_api_key
+      AIRTABLE_API_KEY  = var.airtable_api_key
     }
   }
 }

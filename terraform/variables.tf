@@ -40,3 +40,7 @@ variable "openai_api_key" {
 variable "dub_api_key" {
   type = string
 }
+
+variable "airtable_api_key" {
+  type = string
+}

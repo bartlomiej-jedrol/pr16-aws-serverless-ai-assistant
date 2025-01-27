@@ -68,8 +68,6 @@ func parseBloodResults(ctx context.Context, s3ObjKey string) error {
 	for _, file := range outputFiles {
 		defer os.Remove(file)
 		iLog.Info("converted file", file, nil, configuration.ServiceName, function)
-		// Here you can add additional processing for the JPG files
-		// For example, upload them back to S3 or process them further
 	}
 	return nil
 }
@@ -80,7 +78,7 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 		return api.BuildResponse(http.StatusForbidden, "unauthorized")
 	}
 
-	assistantRequest, err := api.ParseRequest(request.Body)
+	assistantRequest, err := api.Parse(request.Body)
 	if err != nil {
 		return api.BuildResponse(http.StatusInternalServerError, "bad request")
 	}

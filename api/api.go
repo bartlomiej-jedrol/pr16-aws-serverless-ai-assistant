@@ -26,7 +26,7 @@ func Authenticate(apiKey string) bool {
 	return ak == os.Getenv("ASSISTANT_API_KEY")
 }
 
-func ParseRequest(body string) (*Request, error) {
+func Parse(body string) (*Request, error) {
 	function := "ParseRequest"
 
 	msg := Request{}
