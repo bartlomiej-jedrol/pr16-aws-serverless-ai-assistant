@@ -22,3 +22,9 @@ logs:
 	--limit 10000 \
 	--color auto \
 	--output text
+
+.PHONY: push-config
+push-config:
+	@echo "Pushing config to S3..."
+	@aws s3 cp cfg/config.yaml s3://pr16-assistant-bucket/cfg/config.yaml || (echo "Failed to upload config" && exit 1)
+	@echo "Config successfully uploaded to S3"

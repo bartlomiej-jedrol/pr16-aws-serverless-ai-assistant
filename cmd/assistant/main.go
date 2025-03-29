@@ -6,16 +6,17 @@ import (
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	iAws "github.com/bartlomiej-jedrol/go-toolkit/aws"
 	"github.com/bartlomiej-jedrol/pr16-aws-serverless-ai-assistant/api"
-	"github.com/bartlomiej-jedrol/pr16-aws-serverless-ai-assistant/bloodresults"
 	"github.com/bartlomiej-jedrol/pr16-aws-serverless-ai-assistant/configuration"
+	"github.com/bartlomiej-jedrol/pr16-aws-serverless-ai-assistant/telegram"
 )
 
 var (
+	awsCfg        *aws.Config
 	s3Client      *s3.Client
-	bloodParser   bloodresults.Parser
 	s3Bucket      = "pr16-assistant-bucket"
 	lambdaTmpPath = "/tmp"
 )
@@ -27,13 +28,10 @@ func init() {
 	}
 	configuration.SetServiceName(serviceName)
 
-	cfg, err := iAws.LoadDefaultConfig()
+	awsCfg, err = iAws.LoadDefaultConfig()
 	if err != nil {
 		return
 	}
-
-	s3Client = s3.NewFromConfig(*cfg)
-	bloodParser = *bloodParser.New(s3Client, s3Bucket, lambdaTmpPath)
 }
 
 func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
@@ -42,19 +40,12 @@ func handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 		return api.BuildResponse(http.StatusForbidden, "unauthorized")
 	}
 
-	assistantRequest, err := api.Parse(request.Body)
+	message, err := telegram.ParseMessage(request.Body)
 	if err != nil {
-		return api.BuildResponse(http.StatusInternalServerError, "bad request")
+		return api.BuildResponse(http.StatusBadRequest, "bad request")
 	}
 
-	if assistantRequest.Text == "parse blood results" && assistantRequest.S3ObjectKey != "" {
-		err := bloodParser.Parse(ctx, assistantRequest.S3ObjectKey)
-		if err != nil {
-			api.BuildResponse(http.StatusInternalServerError, err.Error())
-		}
-	}
-
-	return api.BuildResponse(http.StatusOK, assistantRequest.Text)
+	return api.BuildResponse(http.StatusOK, message.Text)
 }
 
 func main() {

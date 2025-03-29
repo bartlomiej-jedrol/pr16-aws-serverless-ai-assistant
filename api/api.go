@@ -26,19 +26,6 @@ func Authenticate(apiKey string) bool {
 	return ak == os.Getenv("ASSISTANT_API_KEY")
 }
 
-func Parse(body string) (*Request, error) {
-	function := "ParseRequest"
-
-	msg := Request{}
-	err := json.Unmarshal([]byte(body), &msg)
-	if err != nil {
-		iLog.Error("failed to unmarshal assistant message", nil, err, configuration.ServiceName, function)
-		return nil, err
-	}
-	iLog.Info("assitant message", msg, nil, configuration.ServiceName, function)
-	return &msg, nil
-}
-
 func BuildResponse(statusCode int, body any) (events.APIGatewayProxyResponse, error) {
 	function := "BuildResponse"
 	res := telegram.Response{}
