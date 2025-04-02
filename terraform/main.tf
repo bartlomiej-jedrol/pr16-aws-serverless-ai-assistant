@@ -30,11 +30,14 @@ resource "aws_lambda_function" "assistant_lambda" {
 
   environment {
     variables = {
+      SERVICE_NAME      = var.assistant_lambda_name
+      DB_HOST           = var.db_host
+      DB_USER           = var.db_user
+      DB_PASSWORD       = var.db_password
+      DB_NAME           = var.db_name
       ASSISTANT_API_KEY = var.assistant_api_key
       OPENAI_API_KEY    = var.openai_api_key
       DUB_API_KEY       = var.dub_api_key
-      SERVICE_NAME      = var.assistant_lambda_name
-      CONVERT_API_KEY   = var.convert_api_key
       AIRTABLE_API_KEY  = var.airtable_api_key
     }
   }

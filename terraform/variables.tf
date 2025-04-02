@@ -24,12 +24,24 @@ variable "assistant_bucket_name" {
   default = "pr16-assistant-bucket"
 }
 
-# ========== API keys ==========
-variable "assistant_api_key" {
+# ========== Lambda environment variables ==========
+variable "db_host" {
   type = string
 }
 
-variable "convert_api_key" {
+variable "db_user" {
+  type = string
+}
+
+variable "db_password" {
+  type = string
+}
+
+variable "db_name" {
+  type = string
+}
+
+variable "assistant_api_key" {
   type = string
 }
 
